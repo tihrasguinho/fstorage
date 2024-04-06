@@ -6,7 +6,7 @@ late final LocalStorage storage;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  storage = await LocalStorage.init()
+  storage = await LocalStorage.getInstance()
     ..clear();
 
   storage.register<User>(User.new);
@@ -34,9 +34,9 @@ class _MainAppState extends State<MainApp> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('User: ${storage.get<User>('user')?.toJson()}'),
+              Text('User: ${storage.get<User>('user')?.toMap()}'),
               const SizedBox(height: 16),
-              Text('Post: ${storage.get<Post>('post')?.toJson()}'),
+              Text('Post: ${storage.get<Post>('post')?.toMap()}'),
               Text('String: ${storage.get<String>('string')}'),
               const SizedBox(height: 16),
               Text('Int: ${storage.get<int>('int')}'),

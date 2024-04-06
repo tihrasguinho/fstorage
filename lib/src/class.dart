@@ -24,8 +24,13 @@ class Class {
 
     return Function.apply(
       constructor,
-      all.whereType<PositionalParameter>().toList(),
+      all.whereType<PositionalParameter>().map((e) => e.value).toList(),
       all.whereType<NamedParameter>().fold(<Symbol, dynamic>{}, (prev, next) => {...?prev, next.named: next.value}),
     );
+  }
+
+  @override
+  String toString() {
+    return 'Class(type: $type, constructor: $constructor, parameters: $parameters)';
   }
 }
