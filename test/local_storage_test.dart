@@ -1,7 +1,6 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:local_storage/local_storage.dart';
+import 'package:checks/checks.dart';
 
 class StorageMock implements Storage {
   final Map<String, dynamic> _values;
@@ -30,18 +29,18 @@ void main() {
     storage = LocalStorage.fromStorage(StorageMock(values));
   });
 
-  test('Expect save default types on LocalStorage', () {
+  test('Expect save default types on LocalStorage', () async {
     storage.put<String>('string', 'hello world');
     storage.put<int>('int', 1);
     storage.put<double>('double', 1.0);
     storage.put<bool>('bool', true);
     storage.put<DateTime>('datetime', DateTime(1993, 9, 23));
 
-    expect(storage.get<String>('string'), allOf(isA<String>(), 'hello world'));
-    expect(storage.get<int>('int'), allOf(isA<int>(), 1));
-    expect(storage.get<double>('double'), allOf(isA<double>(), 1.0));
-    expect(storage.get<bool>('bool'), allOf(isA<bool>(), true));
-    expect(storage.get<DateTime>('datetime'), allOf(isA<DateTime>(), DateTime(1993, 9, 23)));
+    check(storage.get<String>('string')).isA<String>().equals('hello world');
+    check(storage.get<int>('int')).isA<int>().equals(1);
+    check(storage.get<double>('double')).isA<double>().equals(1.0);
+    check(storage.get<bool>('bool')).isA<bool>().equals(true);
+    check(storage.get<DateTime>('datetime')).isA<DateTime>().equals(DateTime(1993, 9, 23));
   });
 
   test('Expect an exception `NotRegisteredException` by not registering Entity', () {
@@ -57,13 +56,7 @@ void main() {
       birthDate: DateTime(1993, 9, 23),
     );
 
-    expect(
-      () => storage.put<User>('user', user),
-      allOf(
-        throwsException,
-        throwsA(isA<NotRegisteredException>()),
-      ),
-    );
+    check(() => storage.put<User>('user', user)).throws<NotRegisteredException>();
   });
 
   test('Expect save an `Entity` on LocalStorage', () {
@@ -73,7 +66,7 @@ void main() {
       id: 1,
       name: 'Tiago Alves',
       email: 'tiago@mail.com',
-      image: 'image.png',
+      image: null,
       age: 30,
       weight: 80.5,
       height: 1.75,
@@ -83,18 +76,13 @@ void main() {
 
     storage.put<User>('user', user);
 
-    expect(storage.get<User>('user'), allOf(isA<User>(), user));
+    check(storage.get<User>('user')).isA<User>().equals(user);
   });
 
   test('Expect an exception `NotSupportedException` by not supported type', () {
     const something = Something();
-    expect(
-      () => storage.put<Something>('something', something),
-      allOf(
-        throwsException,
-        throwsA(isA<NotSupportedException>()),
-      ),
-    );
+
+    check(() => storage.put<Something>('something', something)).throws<NotSupportedException>();
   });
 
   test('Expect save multiple values in the same time using batch function', () {
@@ -121,24 +109,20 @@ void main() {
       put<User>('user', user);
     });
 
-    expect(storage.get<String>('string'), allOf(isA<String>(), 'hello world'));
-    expect(storage.get<int>('int'), allOf(isA<int>(), 1));
-    expect(storage.get<double>('double'), allOf(isA<double>(), 1.0));
-    expect(storage.get<bool>('bool'), allOf(isA<bool>(), true));
-    expect(storage.get<DateTime>('datetime'), allOf(isA<DateTime>(), DateTime(1993, 9, 23)));
-    expect(storage.get<User>('user'), allOf(isA<User>(), user));
+    check(storage.get<String>('string')).isA<String>().equals('hello world');
+    check(storage.get<int>('int')).isA<int>().equals(1);
+    check(storage.get<double>('double')).isA<double>().equals(1.0);
+    check(storage.get<bool>('bool')).isA<bool>().equals(true);
+    check(storage.get<DateTime>('datetime')).isA<DateTime>().equals(DateTime(1993, 9, 23));
+    check(storage.get<User>('user')).isA<User>().equals(user);
   });
 
   test('Expect to save a list of default types on LocalStorage', () {
-    storage.put<List<String>>('strings', ['hello', 'world']);
+    final strings = ['hello', 'world'];
 
-    expect(
-      storage.get<List<String>>('strings'),
-      allOf(
-        isA<List<String>>(),
-        ['hello', 'world'],
-      ),
-    );
+    storage.put<List<String>>('strings', strings);
+
+    check(storage.get<List<String>>('strings')).isA<List<String>>();
   });
 }
 
