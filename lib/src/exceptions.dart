@@ -16,3 +16,7 @@ class NotRegisteredException extends LocalStorageException {
 class InvalidException extends LocalStorageException {
   const InvalidException(super.message, [super.stackTrace]);
 }
+
+class NestedListException extends LocalStorageException {
+  const NestedListException([String? message, StackTrace? stackTrace]) : super(message ?? 'Nested list is not supported', stackTrace);
+}

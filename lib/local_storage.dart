@@ -230,17 +230,13 @@ class LocalStorage implements LocalStorageBase {
       final isList = T.toString().startsWith('List');
 
       if (isList) {
-        final listType = _getListType(value as List);
+        final (:type, rounds: _) = _typeListFromString(T.toString());
 
-        if (listType case null || 'dynamic') {
+        if (type case 'dynamic' || 'Object' || 'Object?') {
           throw InvalidException('Invalid type of list $T!');
         }
 
-        if (listType.startsWith('List<')) {
-          throw const NotSupportedException('List of lists is not supported!');
-        }
-
-        switch (listType) {
+        switch (type) {
           case 'String' || 'String?':
           case 'int' || 'int?':
           case 'double' || 'double?':
@@ -249,21 +245,20 @@ class LocalStorage implements LocalStorageBase {
               'type': T.toString().replaceAll('?', ''),
               'nullable': T.toString().endsWith('?'),
               'list': {
-                'type': listType.replaceAll('?', ''),
-                'nullable': listType.endsWith('?'),
+                'type': type.replaceAll('?', ''),
+                'nullable': type.endsWith('?'),
               },
               'value': value,
             };
-
           case 'DateTime' || 'DateTime?':
             return {
               'type': T.toString().replaceAll('?', ''),
               'nullable': T.toString().endsWith('?'),
               'list': {
-                'type': listType.replaceAll('?', ''),
-                'nullable': listType.endsWith('?'),
+                'type': type.replaceAll('?', ''),
+                'nullable': type.endsWith('?'),
               },
-              'value': (value as List<DateTime?>).map((e) => e?.millisecondsSinceEpoch).toList(),
+              'value': (value as List).map((e) => e?.millisecondsSinceEpoch).toList(),
             };
           default:
             throw NotSupportedException('Unsupported type $T!');
@@ -472,6 +467,21 @@ class LocalStorage implements LocalStorageBase {
     ].map((e) => e.value).toSet();
 
     return (finalProps, params);
+  }
+
+  ({String type, int rounds}) _typeListFromString(String listType, [int rounds = 1]) {
+    final regex = RegExp(r'List<(.+)>');
+    final match = regex.firstMatch(listType);
+    if (match == null) {
+      throw Exception('Invalid list type $listType!');
+    } else {
+      final type = match.group(1);
+      if (type?.startsWith('List') == true) {
+        throw const NestedListException();
+      } else {
+        return (type: type!, rounds: rounds);
+      }
+    }
   }
 }
 

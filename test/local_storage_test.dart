@@ -1,6 +1,6 @@
+import 'package:checks/checks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:local_storage/local_storage.dart';
-import 'package:checks/checks.dart';
 
 class StorageMock implements Storage {
   final Map<String, dynamic> _values;
@@ -118,11 +118,39 @@ void main() {
   });
 
   test('Expect to save a list of default types on LocalStorage', () {
-    final strings = ['hello', 'world'];
+    storage.put<List<String>>('strings', ['hello', 'world']);
+    storage.put<List<int>>('ints', [1, 2]);
+    storage.put<List<double>>('doubles', [1.0, 2.0]);
+    storage.put<List<bool>>('bools', [true, false]);
+    storage.put<List<DateTime>>('dates', [DateTime(1993, 9, 23), DateTime(1993, 9, 24)]);
 
-    storage.put<List<String>>('strings', strings);
+    // or batch
 
-    check(storage.get<List<String>>('strings')).isA<List<String>>();
+    storage.batch((put) {
+      put<List<String>>('strings', ['hello', 'world']);
+      put<List<int>>('ints', [1, 2]);
+      put<List<double>>('doubles', [1.0, 2.0]);
+      put<List<bool>>('bools', [true, false]);
+      put<List<DateTime>>('dates', [DateTime(1993, 9, 23), DateTime(1993, 9, 24)]);
+    });
+
+    check(storage.get<List<String>>('strings')).isA<List<String>>().isNotEmpty();
+    check(storage.get<List<int>>('ints')).isA<List<int>>().isNotEmpty();
+    check(storage.get<List<double>>('doubles')).isA<List<double>>().isNotEmpty();
+    check(storage.get<List<bool>>('bools')).isA<List<bool>>().isNotEmpty();
+    check(storage.get<List<DateTime>>('dates')).isA<List<DateTime>>().isNotEmpty();
+  });
+
+  test('Expect an exception `NestedListException` by trying to save a nested list', () {
+    check(
+      () => storage.put<List<List<String>>>(
+        'nestedStrings',
+        [
+          ['hello'],
+          ['world']
+        ],
+      ),
+    ).throws<NestedListException>();
   });
 }
 
