@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:local_storage/src/extensions/string_ext.dart';
+import 'package:fstorage/src/extensions/string_ext.dart';
 import 'package:universal_html/html.dart' as html;
 
-const String _localStorageKey = 'dev.tihrasguinho.local_storage';
+const String _fStorageKey = 'dev.tihrasguinho.fstorage';
 const _empty = '{}';
 
 abstract class Storage {
@@ -25,20 +25,20 @@ final class StorageWeb extends Storage {
 
   @override
   Map<String, dynamic> load() {
-    final source = html.window.localStorage[_localStorageKey]?.decodeFromBase64 ?? '{}';
+    final source = html.window.localStorage[_fStorageKey]?.decodeFromBase64 ?? '{}';
 
     return jsonDecode(source);
   }
 
   @override
   void remove() {
-    html.window.localStorage.remove(_localStorageKey);
+    html.window.localStorage.remove(_fStorageKey);
   }
 
   @override
   void save(Map<String, dynamic> value) {
     html.window.localStorage.update(
-      _localStorageKey,
+      _fStorageKey,
       (_) => jsonEncode(value).encodeToBase64,
       ifAbsent: () => jsonEncode(value).encodeToBase64,
     );

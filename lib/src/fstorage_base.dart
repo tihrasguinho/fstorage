@@ -1,6 +1,6 @@
 import 'entity.dart';
 
-abstract interface class LocalStorageBase {
+abstract interface class FStorageBase {
   /// Register a new [Entity] class to be used in storage.
   ///
   /// E.g:

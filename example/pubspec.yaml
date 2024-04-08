@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  local_storage:
+  fstorage:
     path: ../
 
 dev_dependencies:

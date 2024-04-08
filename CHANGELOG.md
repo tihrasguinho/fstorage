@@ -1,3 +1,4 @@
 ## 0.0.1
-
-* TODO: Describe initial release.
+- Save and load data in your app from local storage.
+- The default types allowed is `String`, `Int`, `Double`, `Bool`, `DateTime` and `Entity`.
+- `Entity` is a superclass that can be extended to create your own types.

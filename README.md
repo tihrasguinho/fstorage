@@ -1,4 +1,4 @@
-### LOCAL STORAGE
+### FStorage (Flutter Storage)
 
 ##### Current types supported
 
@@ -11,14 +11,14 @@
 
 ##### How to use
 
-1. Import `package:local_storage/local_storage.dart`
-2. Use `LocalStorage.get` or `LocalStorage.put`
-3. Use `LocalStorage.batch` to save multiple values at once
+1. Import `package:fstorage/fstorage.dart`
+2. Use `storage.get<T>('key')` or `storage.put<T>('key', value)`
+3. Use `storage.batch((put) => put<T>('key', value))` to save multiple values at once
 
 ##### Create an `Entity` class
 
 ```dart
-import 'package:local_storage/local_storage.dart';
+import 'package:fstorage/fstorage.dart';
 
 class User extends Entity {
   final int id;
@@ -62,7 +62,7 @@ class User extends Entity {
 
 ```dart
 void main() async {
-    final storage = await LocalStorage.init();
+    final storage = await FStorage.init();
 
     final user = User(
         id: 1,

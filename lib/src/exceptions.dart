@@ -1,22 +1,22 @@
-abstract class LocalStorageException implements Exception {
+abstract class FStorageException implements Exception {
   final String message;
   final StackTrace? stackTrace;
 
-  const LocalStorageException(this.message, [this.stackTrace]);
+  const FStorageException(this.message, [this.stackTrace]);
 }
 
-class NotSupportedException extends LocalStorageException {
+class NotSupportedException extends FStorageException {
   const NotSupportedException(super.message, [super.stackTrace]);
 }
 
-class NotRegisteredException extends LocalStorageException {
+class NotRegisteredException extends FStorageException {
   const NotRegisteredException(super.message, [super.stackTrace]);
 }
 
-class InvalidException extends LocalStorageException {
+class InvalidException extends FStorageException {
   const InvalidException(super.message, [super.stackTrace]);
 }
 
-class NestedListException extends LocalStorageException {
+class NestedListException extends FStorageException {
   const NestedListException([String? message, StackTrace? stackTrace]) : super(message ?? 'Nested list is not supported', stackTrace);
 }

@@ -1,6 +1,6 @@
 import 'package:checks/checks.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:local_storage/local_storage.dart';
+import 'package:fstorage/fstorage.dart';
 
 class StorageMock implements Storage {
   final Map<String, dynamic> _values;
@@ -21,15 +21,15 @@ class StorageMock implements Storage {
 }
 
 void main() {
-  late LocalStorage storage;
+  late FStorage storage;
   late Map<String, dynamic> values;
 
   setUp(() async {
     values = {};
-    storage = LocalStorage.fromStorage(StorageMock(values));
+    storage = FStorage.fromStorage(StorageMock(values));
   });
 
-  test('Expect save default types on LocalStorage', () async {
+  test('Expect save default types on FStorage', () async {
     storage.put<String>('string', 'hello world');
     storage.put<int>('int', 1);
     storage.put<double>('double', 1.0);
@@ -59,7 +59,7 @@ void main() {
     check(() => storage.put<User>('user', user)).throws<NotRegisteredException>();
   });
 
-  test('Expect save an `Entity` on LocalStorage', () {
+  test('Expect save an `Entity` on FStorage', () {
     storage.register<User>(User.new);
 
     final user = User(
@@ -117,7 +117,7 @@ void main() {
     check(storage.get<User>('user')).isA<User>().equals(user);
   });
 
-  test('Expect to save a list of default types on LocalStorage', () {
+  test('Expect to save a list of default types on FStorage', () {
     storage.put<List<String>>('strings', ['hello', 'world']);
     storage.put<List<int>>('ints', [1, 2]);
     storage.put<List<double>>('doubles', [1.0, 2.0]);

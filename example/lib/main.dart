@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:local_storage/local_storage.dart';
+import 'package:fstorage/fstorage.dart';
 
-late final LocalStorage storage;
+late final FStorage storage;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  storage = await LocalStorage.getInstance()
+  storage = await FStorage.getInstance()
     ..clear();
 
   storage.register<User>(User.new);

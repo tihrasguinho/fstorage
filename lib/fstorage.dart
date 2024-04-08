@@ -1,38 +1,38 @@
-library local_storage;
+library fstorage;
 
 export 'src/entity.dart';
 export 'src/storage/storage.dart';
 export 'src/exceptions.dart';
 
 import 'package:flutter/foundation.dart';
-import 'package:local_storage/src/entity.dart';
+import 'package:fstorage/src/entity.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'src/class.dart';
 import 'src/exceptions.dart';
-import 'src/local_storage_base.dart';
+import 'src/fstorage_base.dart';
 import 'src/parameter.dart';
 import 'src/storage/storage.dart';
 
 bool _isTypeOf<T, S>() => <T>[] is List<S>;
 
-class LocalStorage implements LocalStorageBase {
+class FStorage implements FStorageBase {
   final Storage _storage;
   final Map<Type, Class> _classes;
   final Map<String, dynamic> _values;
 
-  LocalStorage._(this._storage, this._classes, this._values);
+  FStorage._(this._storage, this._classes, this._values);
 
-  LocalStorage.fromStorage(Storage storage) : this._(storage, <Type, Class>{}, <String, dynamic>{});
+  FStorage.fromStorage(Storage storage) : this._(storage, <Type, Class>{}, <String, dynamic>{});
 
-  static Future<LocalStorage> getInstance() async {
+  static Future<FStorage> getInstance() async {
     final storage = switch (kIsWeb) {
       true => StorageWeb(),
-      false => StorageNative(p.join((await getApplicationDocumentsDirectory()).path, 'local_storage', 'storage')),
+      false => StorageNative(p.join((await getApplicationDocumentsDirectory()).path, 'fstorage', 'storage')),
     };
 
-    return LocalStorage._(storage, <Type, Class>{}, storage.load());
+    return FStorage._(storage, <Type, Class>{}, storage.load());
   }
 
   @override

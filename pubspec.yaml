@@ -1,7 +1,7 @@
-name: local_storage
+name: fstorage
 description: A Flutter package for save local data in your app!
 version: 0.0.1
-homepage: https://github.com/tihrasguinho/local_storage
+homepage: https://github.com/tihrasguinho/fstorage
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

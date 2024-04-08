@@ -91,6 +91,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fstorage:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   html:
     dependency: transitive
     description:
@@ -131,13 +138,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
-  local_storage:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.0.1"
   matcher:
     dependency: transitive
     description:
