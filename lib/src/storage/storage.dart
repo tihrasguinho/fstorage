@@ -1,11 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
+library storage;
 
-import 'package:fstorage/src/extensions/string_ext.dart';
-import 'package:universal_html/html.dart' as html;
-
-const String _fStorageKey = 'dev.tihrasguinho.fstorage';
-const _empty = '{}';
+export 'io/storage_imp.dart' if (dart.library.html) 'web/storage_imp.dart' if (dart.library.io) 'io/storage_imp.dart';
 
 abstract class Storage {
   final String? path;
@@ -15,68 +10,4 @@ abstract class Storage {
   void save(Map<String, dynamic> value);
   void remove();
   Map<String, dynamic> load();
-}
-
-final class StorageWeb extends Storage {
-  StorageWeb();
-
-  @override
-  String? get path => null;
-
-  @override
-  Map<String, dynamic> load() {
-    final source = html.window.localStorage[_fStorageKey]?.decodeFromBase64 ?? '{}';
-
-    return jsonDecode(source);
-  }
-
-  @override
-  void remove() {
-    html.window.localStorage.remove(_fStorageKey);
-  }
-
-  @override
-  void save(Map<String, dynamic> value) {
-    html.window.localStorage.update(
-      _fStorageKey,
-      (_) => jsonEncode(value).encodeToBase64,
-      ifAbsent: () => jsonEncode(value).encodeToBase64,
-    );
-  }
-}
-
-final class StorageNative extends Storage {
-  final String filePath;
-
-  const StorageNative(this.filePath);
-
-  @override
-  String? get path => filePath;
-
-  @override
-  Map<String, dynamic> load() {
-    final file = File(filePath);
-    if (!file.existsSync()) {
-      file.createSync(recursive: true);
-      file.writeAsStringSync(_empty.encodeToBase64);
-      return jsonDecode(_empty);
-    } else {
-      return jsonDecode(file.readAsStringSync().decodeFromBase64);
-    }
-  }
-
-  @override
-  void remove() {
-    final file = File(filePath);
-    if (file.existsSync()) return file.writeAsStringSync(_empty.encodeToBase64);
-  }
-
-  @override
-  void save(Map<String, dynamic> value) {
-    final file = File(filePath);
-    if (!file.existsSync()) {
-      file.createSync(recursive: true);
-    }
-    return file.writeAsStringSync(jsonEncode(value).encodeToBase64);
-  }
 }

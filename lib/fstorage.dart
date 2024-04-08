@@ -27,10 +27,10 @@ class FStorage implements FStorageBase {
   FStorage.fromStorage(Storage storage) : this._(storage, <Type, Class>{}, <String, dynamic>{});
 
   static Future<FStorage> getInstance() async {
-    final storage = switch (kIsWeb) {
-      true => StorageWeb(),
-      false => StorageNative(p.join((await getApplicationDocumentsDirectory()).path, 'fstorage', 'storage')),
-    };
+    final storage = StorageImp(switch (kIsWeb) {
+      true => '',
+      false => p.join((await getApplicationSupportDirectory()).path, 'fStorage', 'database'),
+    });
 
     return FStorage._(storage, <Type, Class>{}, storage.load());
   }
