@@ -1,6 +1,64 @@
 ### LOCAL STORAGE
 
-##### Examples
+##### Current types supported
+
+* String (and List of Strings)
+* Int (and List of Ints)
+* Double (and List of Doubles)
+* Bool (and List of Bools)
+* DateTime (and List of DateTimes)
+* Classes that extends `Entity`
+
+##### How to use
+
+1. Import `package:local_storage/local_storage.dart`
+2. Use `LocalStorage.get` or `LocalStorage.put`
+3. Use `LocalStorage.batch` to save multiple values at once
+
+##### Create an `Entity` class
+
+```dart
+import 'package:local_storage/local_storage.dart';
+
+class User extends Entity {
+  final int id;
+  final String name;
+  final String email;
+  final String? image;
+  final int age;
+  final double weight;
+  final double height;
+  final bool active;
+  final DateTime birthDate;
+
+  const User({
+    required this.id, 
+    required this.name, 
+    required this.email, 
+    required this.image, 
+    required this.age, 
+    required this.weight, 
+    required this.height, 
+    required this.active, 
+    required this.birthDate,
+    });
+
+  @override
+  Map<Symbol, dynamic> get properties => {
+        #id: id,
+        #name: name,
+        #email: email,
+        #image: image,
+        #age: age,
+        #weight: weight,
+        #height: height,
+        #active: active,
+        #birthDate: birthDate,
+      };
+}
+```
+
+##### Saving default types or `Entity` classes
 
 ```dart
 void main() async {
