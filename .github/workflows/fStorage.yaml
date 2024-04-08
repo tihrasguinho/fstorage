@@ -15,5 +15,5 @@ jobs:
       - name: Publish
         uses: sakebook/actions-flutter-pub-publisher@v1.4.1
         with:
-          github_token: ${{ secrets.PUB_DEV_CREDENTIALS }}
+          credential: ${{ secrets.PUB_DEV_CREDENTIALS }}
           dry_run: true
