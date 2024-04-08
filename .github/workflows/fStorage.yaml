@@ -10,5 +10,3 @@ jobs:
     permissions:
       id-token: write
     uses: dart-lang/setup-dart/.github/workflows/publish.yaml@v1
-    with:
-      working-directory: .
