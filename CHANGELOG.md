@@ -3,5 +3,5 @@
 - The default types allowed is `String`, `Int`, `Double`, `Bool`, `DateTime` and `Entity`.
 - `Entity` is a superclass that can be extended to create your own types.
 
-## 0.0.1+1
+## 0.0.2
 - Removed universal_html package
