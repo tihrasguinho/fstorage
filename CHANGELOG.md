@@ -5,3 +5,6 @@
 
 ## 0.0.1+1
 - Removed universal_html package
+
+## 0.0.1+2
+- Small adjustments in the Storage class

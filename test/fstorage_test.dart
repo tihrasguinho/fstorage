@@ -11,7 +11,7 @@ class StorageMock implements Storage {
   Map<String, dynamic> load() => _values;
 
   @override
-  String? get path => throw UnimplementedError();
+  String? get path => '';
 
   @override
   void remove() => _values.clear();

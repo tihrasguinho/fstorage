@@ -4,12 +4,11 @@ export 'src/entity.dart';
 export 'src/storage/storage.dart';
 export 'src/exceptions.dart';
 
-import 'package:flutter/foundation.dart';
-import 'package:fstorage/src/entity.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'src/class.dart';
+import 'src/entity.dart';
 import 'src/exceptions.dart';
 import 'src/fstorage_base.dart';
 import 'src/parameter.dart';
@@ -27,10 +26,7 @@ class FStorage implements FStorageBase {
   FStorage.fromStorage(Storage storage) : this._(storage, <Type, Class>{}, <String, dynamic>{});
 
   static Future<FStorage> getInstance() async {
-    final storage = StorageImp(switch (kIsWeb) {
-      true => '',
-      false => p.join((await getApplicationSupportDirectory()).path, 'fStorage', 'database'),
-    });
+    final storage = StorageImp(p.join((await getApplicationSupportDirectory()).path, 'fStorage', 'database'));
 
     return FStorage._(storage, <Type, Class>{}, storage.load());
   }
@@ -433,7 +429,7 @@ class FStorage implements FStorageBase {
   }
 
   (Set properties, List<Parameter> parameters) _normalizeParametersAndProps(Map<Symbol, dynamic> properties, List<Parameter> parameters) {
-    if (!kIsWeb) {
+    if (_storage.path != null) {
       return (properties.values.toSet(), parameters);
     }
 
@@ -485,8 +481,9 @@ class FStorage implements FStorageBase {
   }
 }
 
-final class _Placeholder {
-  const _Placeholder();
+final class _FStoragePlaceholder {
+  final int timestamp;
+  const _FStoragePlaceholder(this.timestamp);
 }
 
-const _placeholder = _Placeholder();
+const _placeholder = _FStoragePlaceholder(1234567890);
